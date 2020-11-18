@@ -1,0 +1,95 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.acme.fypehr
+
+participant Patient identified by patientId {
+  o String patientId
+  o String name
+  o String diseas
+  o String address
+  o String contact_no
+  o String email
+  o String password
+}
+participant Doctor identified by doctorId {
+  o String doctorId
+  o String name
+  o String type
+  o String address
+  o String contact_no
+  o String email
+  o String password
+}
+participant Lab identified by labId {
+  o String labId
+  o String name
+  o String type
+  o String address
+  o String contact_no
+  o String email
+  o String password
+}
+asset Appointment identified by appointmentId {
+  o String appointmentId
+  o DateTime date
+  o String description
+  --> Patient owner
+}
+asset Prescription identified by prescriptionId {
+  o String prescriptionId
+  o String appointmentId
+  o DateTime date
+  o String description
+  o String suggestion
+  --> Doctor owner
+}
+asset Tests identified by testId {
+  o String testId
+  o String prescriptionId
+  o String tests_suggest_name
+  --> Doctor owner
+}
+asset Records identified by recordId {
+  o String recordId
+  o String testId
+  o String test_name
+  o DateTime test_req_date
+  o String upload_test_report
+  --> Lab owner
+}
+transaction Appoint {
+  --> Appointment appointment
+  --> Patient patient
+  --> Doctor doctor
+}
+transaction Prescribe {
+  --> Prescription prescription
+  --> Doctor doctor
+  --> Patient patient
+}
+transaction Sugest {
+  --> Tests tests
+  --> Doctor doctor
+  --> Lab lab
+}
+transaction Record {
+  --> Records records
+  --> Patient patient
+  --> Lab lab
+}
